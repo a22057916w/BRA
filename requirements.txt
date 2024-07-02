@@ -1,12 +1,12 @@
 argparse==1.4.0
-Cython==0.29.30
+Cython==3.0.10
 git+https://github.com/YyuK-Liao/cython_bbox.git#egg=cython-bbox
 git+https://github.com/assafmus/lap.git#egg=lap
 loguru==0.6.0
 numpy==1.23.1
 opencv-python==4.5.5.64
 pandas==1.4.3
-pycocotools==2.0.4
+pycocotools==2.0.6
 PyYAML==6.0
 scikit-image==0.19.3
 scipy==1.8.1
