@@ -28,7 +28,7 @@ git clone --recurse-submodules https://github.com/a22057916w/BRA.git
 cd BRA
 # 建立一個python虛擬環境
 # 「.dev-env」是虛擬環境的名字，可以自己改
-py -3.8 -m venv .dev-env
+py -3.8 -m venv .3.8-env
 
 # 啟用虛擬環境
 # windows
