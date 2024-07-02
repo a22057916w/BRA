@@ -37,10 +37,10 @@ python -m venv .dev-env
 source .dev-env/bin/activate
 
 # 安裝模組
-python -m pip install -r requirement.txt
+python -m pip install -r requirements.txt
 ```
 接下來我們必須要安裝pytorch和torchvision，這兩個模組會依賴預安裝的CUDA，如果還沒請[下載](https://developer.nvidia.com/cuda-toolkit-archive)並安裝。
-> **WARM:** 請注意，Pytorch並不是每一個版本的CUDA都支援，請先查詢。
+> **WARN:** 請注意，Pytorch並不是每一個版本的CUDA都支援，請先查詢。
 > 
 確認安裝好後，需要先到[Pytorch](https://pytorch.org/get-started/locally/)或是[Pytorch舊版檔案](https://pytorch.org/get-started/previous-versions/)來查詢安裝指令。請務必根據自己的「作業系統」、「CUDA版本」來進行選擇，「模組管理」這邊使用pip，「語言」請選擇Python。
 ```bash
