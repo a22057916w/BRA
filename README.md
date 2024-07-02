@@ -32,7 +32,7 @@ python -m venv .dev-env
 
 # 啟用虛擬環境
 # windows
-.dev-env/Scripts/activate
+.\.dev-env\Scripts\activate
 # GNU/Linux
 source .dev-env/bin/activate
 
