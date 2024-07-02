@@ -20,3 +20,4 @@ test/*
 *.ps1
 test_*
 *.log
+/.3.8-env/Lib
