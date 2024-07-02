@@ -21,3 +21,4 @@ test/*
 test_*
 *.log
 /.3.8-env/Lib
+/.3.8-env
