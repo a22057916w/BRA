@@ -133,12 +133,14 @@ python -m pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-inde
           Media Foundation:            YES
             DXVA:                      YES
         ```
-  9.  接下我們要調整`OPENCV_EXTRA_MODULES_PATH`的參數，我們可以透過如下圖中的黃色框來搜尋，並將我們解壓縮後的contrib資料夾底下的modules的位置填入，如下圖中的藍色框，示範使用的位置為`V:/dev/opencv/opencv_contrib-4.6.0/modules`。
+        如果沒有偵測到Gstreamer的話，將`GSTREAMER_DIR`加入Cmake變數:
+       
+  10.  接下我們要調整`OPENCV_EXTRA_MODULES_PATH`的參數，我們可以透過如下圖中的黃色框來搜尋，並將我們解壓縮後的contrib資料夾底下的modules的位置填入，如下圖中的藍色框，示範使用的位置為`V:/dev/opencv/opencv_contrib-4.6.0/modules`。
         ![opencv_installation2.png](PNG/opencv_installation2.png)
 
       同樣的方法，我們將`EIGEN_INCLUDE_PATH`修改為剛剛解壓縮的eigen 3.4.0資料夾，示範使用的位置是`V:\CppLibrary\eigen-3.4.0`。
       最後將`BUILD_opencv_world`參數啟用，將`BUILD_SHARED_LIBS`參數關閉。
-  10.  設定完成後再進行一次configuration，下面的是範例的輸出內容：
+  11.  設定完成後再進行一次configuration，下面的是範例的輸出內容：
         ```bash
         General configuration for OpenCV 4.6.0 =====================================
           Version control:               unknown
@@ -265,11 +267,11 @@ python -m pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-inde
 
         接著按下Generate，CMake就會開始產生Visual Studio 2019的專案了。
 
-  11.  以系統管理員權限來開啟VS2019，打開在build資料夾底下的`OpenCV.sln`檔案，將專案切換為Release x64模式。只需要再VS2019上方的工具列選擇即可。
-  12.  建置方式很簡單，在上方的建置>建置>INSTALL，如下圖：
+  12.  以系統管理員權限來開啟VS2019，打開在build資料夾底下的`OpenCV.sln`檔案，將專案切換為Release x64模式。只需要再VS2019上方的工具列選擇即可。
+  13.  建置方式很簡單，在上方的建置>建置>INSTALL，如下圖：
         ![opencv_installation3.png](PNG/opencv_installation3.png)
        完成後，如果VS2019上面沒有顯示錯誤就是成功了。
-  13.  一旦成功，就可進入`build\python_loader`底下來建立wheel檔案，提供給Python虛擬環境來用了。可以透過如下指令來建立：
+  14.  一旦成功，就可進入`build\python_loader`底下來建立wheel檔案，提供給Python虛擬環境來用了。可以透過如下指令來建立：
         ```bash
         cd V:\dev\opencv\build\python_loader
         python -m pip wheel .
@@ -280,7 +282,7 @@ python -m pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-inde
        python -m pip install numpy-1.23.5-cp39-cp39-win_amd64.whl 
        python -m pip install opencv-4.6.0-py3-none-any.whl
        ```
-  14.  經過測試，發現Python3.8以後都會遇到DLL載入[問題](https://github.com/opencv/opencv/issues/17632)，因為Python在Windows上對DLL的載入機制變的更嚴格了，可以參考[Python DOC](https://docs.python.org/3.8/whatsnew/3.8.html#ctypes)；我們需要先透過`os.add_all_dll_directory()`來新增dll資料夾，但這需要修改程式中每一個呼叫`import cv2`的地方，並不是很方便，所幸OpenCV Python Binding有提供應對方案，**那就是修改`lib\site-packages\cv2\__init__.py`中位於第89行的變數`BINARIES_PATHS`**，這裡我們可以加入Gstreamer的bin資料夾，範例中位於`V:\CppLibrary\gstreamer\1.0\msvc_x86_64\bin`：
+  15.  經過測試，發現Python3.8以後都會遇到DLL載入[問題](https://github.com/opencv/opencv/issues/17632)，因為Python在Windows上對DLL的載入機制變的更嚴格了，可以參考[Python DOC](https://docs.python.org/3.8/whatsnew/3.8.html#ctypes)；我們需要先透過`os.add_all_dll_directory()`來新增dll資料夾，但這需要修改程式中每一個呼叫`import cv2`的地方，並不是很方便，所幸OpenCV Python Binding有提供應對方案，**那就是修改`lib\site-packages\cv2\__init__.py`中位於第89行的變數`BINARIES_PATHS`**，這裡我們可以加入Gstreamer的bin資料夾，範例中位於`V:\CppLibrary\gstreamer\1.0\msvc_x86_64\bin`：
         ```python
         89     BINARIES_PATHS = [r'V:\CppLibrary\gstreamer\1.0\msvc_x86_64\bin']
         ```
