@@ -133,7 +133,7 @@ python -m pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-inde
           Media Foundation:            YES
             DXVA:                      YES
         ```
-        如果沒有偵測到Gstreamer的話，將`GSTREAMER_DIR`加入Cmake變數: <br><br>
+        如果沒有偵測到Gstreamer的話，將`GSTREAMER_DIR`加入Cmake變數: <br>
          ![](PNG/Gstreamer_cmake.png) <br>
        接著重新設置建置，於左上角**File**->**Reload Cache**，然後從新跑一次**Configure**。
 
