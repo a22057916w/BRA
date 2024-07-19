@@ -276,12 +276,13 @@ python -m pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-inde
        完成後，如果VS2019上面沒有顯示錯誤就是成功了。
   14.  一旦成功，就可進入`build\python_loader`底下來建立wheel檔案，提供給Python虛擬環境來用了。可以透過如下指令來建立：
         ```bash
+        # 啟用python虛擬環境
         cd V:\dev\opencv\build\python_loader
         python -m pip wheel .
         ```
        執行後，會在`build\python_loader`底下建立`numpy-x.xx.x-cpxx-cpxx-win_amd64.whl`和`opencv-4.6.0-py3-none-any.whl`這兩個wheel檔案，這能直接安裝
        ```bash
-       # 啟用python虛擬環境
+       # 在python虛擬環境中
        python -m pip install numpy-1.23.5-cp39-cp39-win_amd64.whl 
        python -m pip install opencv-4.6.0-py3-none-any.whl
        ```
