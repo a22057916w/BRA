@@ -133,8 +133,9 @@ python -m pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-inde
           Media Foundation:            YES
             DXVA:                      YES
         ```
-        如果沒有偵測到Gstreamer的話，將`GSTREAMER_DIR`加入Cmake變數:
-         ![](PNG/Gstreamer_cmake.png)
+        如果沒有偵測到Gstreamer的話，將`GSTREAMER_DIR`加入Cmake變數: <br>
+         ![](PNG/Gstreamer_cmake.png) <br>
+       接著重新設置建置，於左上角**File**->**Reload Cache**，然後從新跑一次**Configure**。
 
        
   10.  接下我們要調整`OPENCV_EXTRA_MODULES_PATH`的參數，我們可以透過如下圖中的黃色框來搜尋，並將我們解壓縮後的contrib資料夾底下的modules的位置填入，如下圖中的藍色框，示範使用的位置為`V:/dev/opencv/opencv_contrib-4.6.0/modules`。
