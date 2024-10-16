@@ -1,5 +1,7 @@
 # venv
 .dev-env/
+/.3.8-env/Lib
+/.3.8-env
 
 # cache
 __pycache__/
@@ -20,5 +22,6 @@ test/*
 *.ps1
 test_*
 *.log
-/.3.8-env/Lib
-/.3.8-env
+
+# videos
+/video
