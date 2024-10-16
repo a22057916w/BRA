@@ -12,6 +12,7 @@ __proot__ = osp.normpath(osp.join(osp.dirname(__file__), ".."))
 sys.path.append(__proot__)
 sys.path.append(osp.join(__proot__,  "third_party", "YOLOX"))
 sys.path.append(osp.join(__proot__, "third_party", "ByteTrack", "yolox"))
+sys.path.append(osp.join(__proot__, "exps"))
 
 import compute_block as cmb
 from tracker.byte_tracker import BYTETracker
