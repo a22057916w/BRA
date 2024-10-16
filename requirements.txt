@@ -1,5 +1,5 @@
 argparse==1.4.0
-Cython==3.0.10
+Cython==0.29.30
 git+https://github.com/YyuK-Liao/cython_bbox.git#egg=cython-bbox
 git+https://github.com/assafmus/lap.git#egg=lap
 loguru==0.6.0
