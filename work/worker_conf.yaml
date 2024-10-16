@@ -1,0 +1,48 @@
+mask:
+  pipe_enable: True
+  device: 'cuda:0'
+  exp: 'F:\Code/BRA/exps/FaceMask_m.py'
+  # checkpoint: 'pretrain/FMD_m1k.pth'
+  checkpoint: 'F:\Code\BRA\pretrain\FMD_m1k.pth'
+  fp16: True
+  fuse: True
+  legacy: False
+  trt_mode: True
+  # trt_path: /BRA/pretrain/trt/FaceMask_m_trt.pth
+  trt_path: F:\Code\BRA\pretrain\trt\FaceMask_m_trt.pth
+  trt_batch: 16
+  trt_workspace: 32
+
+track_opt: &pt
+  enable: True
+  track_thresh: 0.5
+  track_buffer: 300
+  match_thresh: 0.7
+  aspect_ratio_thresh: 1.6
+  min_box_area: 10.0
+
+reid_opt: &ptreid
+  device: 'cuda:0'
+  cfg: 'F:\Code/BRA/third_party/fast-reid/configs/MSMT17/sbs_S50.yml'
+  checkpoint: 'F:\Code/BRA/pretrain/msmt_sbs_S50.pth'
+
+person:
+  pipe_enable: True
+  device: 'cuda:0'
+  exp: 'F:\Code/BRA/third_party/ByteTrack/exps/example/mot/yolox_m_mix_det.py'
+  checkpoint: 'F:\Code/BRA/pretrain/bytetrack_m_mot17.pth.tar'
+  fp16: True
+  fuse: True
+  legacy: True
+  trt_mode: True
+  trt_path: F:\Code/BRA/pretrain/trt/bytetrack_m_mot17_trt.pth
+  trt_batch: 16
+  trt_workspace: 32
+  track_opt: *pt
+  reid_opt: *ptreid
+
+general:
+  record_life: 2
+  metrics_duration: 600
+  metrics_update_time: 60
+  async_frame_center: False
