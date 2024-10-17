@@ -1,7 +1,8 @@
 # venv
 .dev-env/
-/.3.8-env/Lib
 /.3.8-env
+/.38-env
+
 
 # cache
 __pycache__/
@@ -25,4 +26,3 @@ test_*
 
 # videos
 /video
-/.38-env
