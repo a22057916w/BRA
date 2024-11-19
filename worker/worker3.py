@@ -109,6 +109,13 @@ class Worker(BaseWorker):
         self.distance_metrics = None
         self.wash_correct_metrics = None
 
+        # 新增時間分割相關的屬性
+        self.current_task = 0  # 0: 口罩, 1: 社交距離, 2: 洗手
+        self.task_timer = 0    # 計數當前任務執行的幀數
+        self.last_mask_stats = None      # 儲存上一次的口罩統計
+        self.last_distance_stats = None  # 儲存上一次的距離統計
+        self.last_wash_stats = None      # 儲存上一次的洗手統計
+
     def lazy_init(self):
         if self.config['track_opt']['enable'] and self.reid:
             self.byteTracker = BYTETracker_reid(type('',(object,),self.track_parameter)(), frame_rate=self.fps)
@@ -143,6 +150,18 @@ class Worker(BaseWorker):
             'frames':FList,
             'fids':FIDs,
         }
+
+        # 更新任務計時器
+        self.task_timer += length
+        frames_per_switch = self.fps * 30
+
+        
+        # 如果達到一分鐘,切換到下一個任務
+        if self.task_timer >= frames_per_switch:
+            self.current_task = (self.current_task + 1) % 3
+            self.task_timer = 0
+            logger.info(f"Switching to task: {['Mask Detection', 'Social Distance', 'Hand Washing'][self.current_task]}")
+
 
         # [LEVEL_1_BLOCK] === INPUT -> frame
         person_outputs, person_infos = null_list, null_list
@@ -201,7 +220,7 @@ class Worker(BaseWorker):
         packet['crowd_count'] = crowd_count
 
         mask_wearing_count, no_mask_count = null_list, null_list
-        if self.config['mask']['pipe_enable']:
+        if self.current_task == 0 and self.config['mask']['pipe_enable']:
             mask_wearing_count, no_mask_count = [], []
             for frame, m_output, m_info in zip(packet['frames'], packet['m_outputs'], packet['m_infos']):
                 with_mask, without_mask = [], []
@@ -220,7 +239,7 @@ class Worker(BaseWorker):
         # [LEVEL_3_BLOCK] === INPUT -> tracked ID and tracked person
         # (HAND)
         no_hand_washing_count, hand_washing_wrong_count, hand_washing_correct_count = null_list, null_list, null_list
-        if self.config['person']['pipe_enable']:
+        if self.current_task == 1 and self.config['person']['pipe_enable']:
             no_hand_washing_count, hand_washing_wrong_count, hand_washing_correct_count = [], [], []
             for frame, t_person in zip(packet['frames'], packet['tracked_person']):
                 notWashIds, wrongWashIds, correctWashIds = [], [], []
@@ -236,7 +255,7 @@ class Worker(BaseWorker):
 
         # (DISTANCE)
         social_distance, distance_segment_count = null_list, null_list
-        if self.config['person']['pipe_enable']:
+        if self.current_task == 2 and self.config['person']['pipe_enable']:
             social_distance, distance_segment_count = [], []
             for frame, t_person in zip(packet['frames'], packet['tracked_person']):
                 if self.config['track_opt']['enable']:
@@ -317,6 +336,20 @@ class Worker(BaseWorker):
                 fg_color=(255, 255, 255), bg_color=(0 ,0 ,0, 0.4),
                 point_reverse=(True,True)
             )
+            task_names = ['Mask Detection', 'Social Distance', 'Hand Washing']
+            task_texts = [
+                f'Task Status',
+                f'+ Current: {task_names[self.current_task]}',
+                f'+ Time Left: {(frames_per_switch - self.task_timer) / self.fps:.1f}s'
+            ]
+            cmb.VISBlockText(
+                frame,
+                task_texts, (20, 20),  
+                ratio=1, thickness=3, 
+                fg_color=(0, 0, 0), bg_color=(255, 255, 255, 0.4),
+                point_reverse=(False,False)
+            )
+
 
             hours, remain_second_frame = math.floor(fid / (3600*self.fps)), fid % (3600*self.fps)
             minutes, remain_second_frame = math.floor(remain_second_frame / (60*self.fps)), remain_second_frame % (60*self.fps)
@@ -369,3 +402,7 @@ class Worker(BaseWorker):
 
     def _endingWork(self):
         self.FCenter.Exit()
+
+
+    def get_video_time(self):
+        return self.FCenter.Get(cv2.CAP_PROP_POS_MSEC) / 1000
