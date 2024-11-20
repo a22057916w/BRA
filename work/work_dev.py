@@ -133,6 +133,11 @@ def make_parser():
         type=str, default='FFMPEG',
         help='backend for processing io->FFMPEG or GSTREAMER'
     )
+    parser.add_argument(
+        '-ets', '--enable_task_scheduling',
+        action='store_true',
+        help="enable task scheduling (default FALSE)"
+    )
     return parser
 
 def make_ffmpeg_process(shape, fps, encoder, destination, log):
@@ -472,6 +477,7 @@ def main():
 
     logger.remove()
     logger.add(sys.stdout, level=args.log_level)
+    # logger.add("work_dev.log", level="DEBUG", mode="w")
     if args.output_scale is not None:
         try:
             if re.match(
@@ -500,7 +506,8 @@ def main():
         reid=args.reid,
         start_second = args.start_second,
         batch_size=args.batch_size,
-        io_backend = 'FFMPEG' if args.io_backend=='FFMPEG' or args.io_backend=='MIXFG' else 'GSTREAMER'
+        io_backend = 'FFMPEG' if args.io_backend=='FFMPEG' or args.io_backend=='MIXFG' else 'GSTREAMER',
+        enable_task_scheduling = args.enable_task_scheduling
     )
 
 
@@ -617,7 +624,8 @@ def main():
                     if stream_publisher is not None:
                         stream_publisher.pipe.append(frame)
                     if video_writer is not None:
-                        video_writer.pipe.append(frame)
+                        video_writer.pipe.append(frame)            
+                        
                 # analyst time consumption
                 if time_point is not None:
                     delta_time = time.time() - time_point
