@@ -20,6 +20,22 @@ class TriggerNode:
 
 class EventFilter:
     def __init__(self, configPath, record_life=5, fps=25):
+        """
+        初始化 EventFilter 類，讀取配置並設置相關的屬性。
+
+        參數:
+        - configPath (str): 配置文件的路徑，用於加載事件過濾的設定。
+          配置文件中包含觸發條件的描述 (`trigger_description`) 和各種行為的閾值 (`threshold`)。
+        - record_life (int, 默認值為 5): 指定對象在未檢測到目標行為後保留的幀數。
+        - fps (int, 默認值為 25): 視頻的每秒幀數，用於將時間轉換為幀數。
+
+        配置文件中的關鍵參數:
+        - trigger_description (dict): 包含 `collector` 和 `base`，分別用於描述不同的觸發器節點配置。
+        - threshold (dict): 包含三種狀態的時間閾值（以秒為單位）：
+            - target: 目標行為所需的持續時間。
+            - nonTarget: 非目標行為所需的持續時間，用於判斷對象不符合條件。
+            - waiting: 等待狀態的持續時間，用於判斷對象是否繼續觀察。
+        """
         configStream = open(configPath, 'r')
         self.config = yaml.safe_load(configStream)
         configStream.close()
