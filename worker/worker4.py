@@ -306,6 +306,15 @@ class Worker(BaseWorker):
             )
             texts = [
                 f'Period-time',
+                # f'fid: {fid}',
+                # f'self.person_count_metrics.counter: {self.person_count_metrics.counter}',
+                # f'self.person_count_metrics.AC_END: {self.person_count_metrics.AC_END}',
+                # f'self.mask_metrics.counter: {self.mask_metrics.counter}',
+                # f'self.mask_metrics.AC_END: {self.mask_metrics.AC_END}',
+                # f'self.overall_metrics["mask"]: {self.overall_metrics["mask"]}',
+                # f'self.wash_correct_metrics.counter: {self.wash_correct_metrics.counter}',
+                # f'self.wash_correct_metrics.AC_END: {self.wash_correct_metrics.AC_END}',
+                # f'self.wash_correct_metrics.period_buffer[\'denominator\']: {self.wash_correct_metrics.period_buffer["denominator"]}',
                 f'+ Person Count: {f"{p_crowdCount:.2f}" if p_crowdCount is not None else "not support"}',
                 f'+ Social Distance: {f"{p_dist / 100:.2f} m" if p_dist is not None else "not support"}',
                 f'+ Mask Ratio: {f"{p_mask_ratio * 100:.2f}%" if p_mask_ratio is not None else "not support"}',
