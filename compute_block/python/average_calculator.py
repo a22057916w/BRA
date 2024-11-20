@@ -15,7 +15,7 @@ class ACBlock:
         self.zero_buffer['numerator'] += numerator
         self.zero_buffer['denominator'] += denominator
 
-        if self.counter <= self.AC_END:
+        if self.counter != self.AC_END:
             self.counter += 1
             return self.output_buffer, False
         
