@@ -39,6 +39,7 @@ class FrameCenter:
             for _ in range(int(self.start_second*self.Metadata['fps'])):
                 self.cap.read()
 
+    # 從影像緩存 (frame_bfr) 中分配一批影像幀數據，負責管理幀的批次大小，並處理幀數據的 ID 分配
     def Allocate(self)->Tuple[Deque[np.ndarray], int, Deque[int], bool]:
         if len(self.frame_bfr) == 0:
             return deque(), 0, deque(), True
@@ -49,10 +50,12 @@ class FrameCenter:
             fids = deque(range(self.base_frame_ID, self.base_frame_ID+self.max_batch))
             self.base_frame_ID = self.base_frame_ID + self.max_batch
             return bfr, self.max_batch, fids, False
+        
         bfr = self.frame_bfr[0].copy()
         self.frame_bfr[0].clear()
         fids = deque(range(self.base_frame_ID, self.base_frame_ID+len(bfr)))
         self.base_frame_ID = self.base_frame_ID + len(bfr)
+
         if len(self.frame_bfr) > 1 or self.current_pipe is None:
             self.frame_bfr.popleft()
             self.base_frame_ID = 1
