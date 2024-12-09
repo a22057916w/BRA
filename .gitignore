@@ -26,3 +26,4 @@ test_*
 
 # videos
 /video
+*.mp4
