@@ -27,3 +27,5 @@ test_*
 # videos
 /video
 *.mp4
+*.csv
+*.avi
