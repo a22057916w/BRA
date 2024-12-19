@@ -473,6 +473,7 @@ class monitor_display:
 
 @logger.catch
 def main():
+    start_time = time.time()  # 開始計時
     args = make_parser().parse_args()
 
     logger.remove()
@@ -672,6 +673,10 @@ def main():
     except Exception as e:
         logger.exception(e)
     finally:
+        end_time = time.time()  # 結束計時
+        elapsed_time = end_time - start_time
+        logger.info(f'總執行時間: {elapsed_time:.2f} 秒')  # 輸出總執行時間
+        logger.info('Work finished.')
         logger.info('Work finished.')
         if args.stream_output is not None:
             if stream_publisher is not None:
