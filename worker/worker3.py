@@ -234,8 +234,7 @@ class Worker(BaseWorker):
         # [LEVEL_3_BLOCK] === INPUT -> tracked ID and tracked person
         # (HAND)
         no_hand_washing_count, hand_washing_wrong_count, hand_washing_correct_count = null_list, null_list, null_list
-        # if self.config['person']['pipe_enable']:
-        if (self.enable_task_scheduling and self.current_task == 0) and self.config['person']['pipe_enable']:
+        if self.perform_task(self.config['person']['pipe_enable'], self.enable_task_scheduling, self.current_task == 0):
             no_hand_washing_count, hand_washing_wrong_count, hand_washing_correct_count = [], [], []
             for frame, t_person in zip(packet['frames'], packet['tracked_person']):
                 notWashIds, wrongWashIds, correctWashIds = [], [], []
@@ -252,7 +251,7 @@ class Worker(BaseWorker):
         # (DISTANCE)
         social_distance, distance_segment_count = null_list, null_list
         # if self.config['person']['pipe_enable']:
-        if (self.enable_task_scheduling and self.current_task == 1) and self.config['person']['pipe_enable']:
+        if self.perform_task(self.config['person']['pipe_enable'], self.enable_task_scheduling, self.current_task == 1):
             social_distance, distance_segment_count = [], []
             for frame, t_person in zip(packet['frames'], packet['tracked_person']):
                 if self.config['track_opt']['enable']:
@@ -283,7 +282,7 @@ class Worker(BaseWorker):
         # (MASK)
         mask_wearing_count, no_mask_count = null_list, null_list
         # if self.config['mask']['pipe_enable']:
-        if (self.enable_task_scheduling and self.current_task == 2) and self.config['mask']['pipe_enable']:
+        if self.perform_task(self.config['mask']['pipe_enable'], self.enable_task_scheduling, self.current_task == 2):
             mask_wearing_count, no_mask_count = [], []
             for frame, m_output, m_info in zip(packet['frames'], packet['m_outputs'], packet['m_infos']):
                 with_mask, without_mask = [], []
@@ -461,3 +460,15 @@ class Worker(BaseWorker):
 
     def get_video_time(self):
         return self.FCenter.Get(cv2.CAP_PROP_POS_MSEC) / 1000
+    
+    def perform_task(self, config, enable, task):
+        if config:
+            if enable:
+                if task:
+                    return True
+                else:
+                    return False
+            else:
+                return True
+        else:
+            return False
