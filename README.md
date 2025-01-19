@@ -407,8 +407,8 @@ ARGS的選項有很多，我們可以類型來分類，其中「*」代表必填
 ||短前綴|長前綴|參數|意義|
 |------|------|------|------|------|
 |||--legacy||只處理一次輸入源就結束|
-||-ets |--enable_task_scheduling|使每項任務輪流執行||
-||-tp  |--task_period  |給定每項任務的執行時間||
+||-ets |--enable_task_scheduling||使每項任務輪流執行||
+||-tp  |--task_period  |秒數                 |給定每項任務的執行時間||
 ||-b   |--batch_size   |最大的一次執行批次數 ||
 ||-fps |--fps          |浮點數               |預設是從輸入源的header||
 ||-ss  |--start_second |hh:mm:ss.ms 或秒數   |輸入源的起始位置||
