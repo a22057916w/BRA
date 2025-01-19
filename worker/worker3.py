@@ -39,7 +39,8 @@ class Worker(BaseWorker):
         batch_size=1,
         enable_track=None,
         io_backend="FFMPEG",
-        enable_task_scheduling=False
+        enable_task_scheduling=False,
+        task_period=None
     ):
         super().__init__(EOI=['LOSS_CAPTURE', 'GET_CAPTURE'])
         configStream = open(worker_cfg, 'r')
@@ -113,6 +114,7 @@ class Worker(BaseWorker):
 
         # 時間分割相關的屬性
         self.enable_task_scheduling = enable_task_scheduling
+        self.task_period = task_period
         self.current_task = None
         self.task_timer = None
 
@@ -130,21 +132,28 @@ class Worker(BaseWorker):
             self.byteTracker = BYTETracker(type('',(object,),self.track_parameter)(), frame_rate=self.fps)       
         self.washFilter = EventFilter(self.vcfg_path, self.config['general']['record_life'], self.fps)
         
+        if self.enable_task_scheduling:
+            metrics_update_time = self.task_period
+            print(type(metrics_update_time))
+            print(metrics_update_time)
+        else:
+            metrics_update_time = self.config["general"]["metrics_update_time"]
+
         self.person_count_metrics = cmb.ACBlock(
             self.fps*self.config['general']['metrics_duration'],
-            self.fps*self.config['general']['metrics_update_time'],
+            self.fps*metrics_update_time,
         )
         self.mask_metrics = cmb.ACBlock(
             self.fps*self.config['general']['metrics_duration'],
-            self.fps*self.config['general']['metrics_update_time'],
+            self.fps*metrics_update_time,
         )
         self.distance_metrics = cmb.ACBlock(
             self.fps*self.config['general']['metrics_duration'],
-            self.fps*self.config['general']['metrics_update_time'],
+            self.fps*metrics_update_time,
         )
         self.wash_correct_metrics = cmb.ACBlock(
             self.fps*self.config['general']['metrics_duration'],
-            self.fps*self.config['general']['metrics_update_time'],
+            self.fps*metrics_update_time,
         )
         # For both task-scheduling and non-scheduling
         self.overall_metrics = {
