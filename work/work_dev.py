@@ -138,6 +138,11 @@ def make_parser():
         action='store_true',
         help="enable task scheduling (default FALSE)"
     )
+    parser.add_argument(
+        '-tp', '--task_period',
+        type=int, default=60,
+        help="set the peroid of each task for scheduling (default 60s)"
+    )
     return parser
 
 def make_ffmpeg_process(shape, fps, encoder, destination, log):
@@ -508,7 +513,8 @@ def main():
         start_second = args.start_second,
         batch_size=args.batch_size,
         io_backend = 'FFMPEG' if args.io_backend=='FFMPEG' or args.io_backend=='MIXFG' else 'GSTREAMER',
-        enable_task_scheduling = args.enable_task_scheduling
+        enable_task_scheduling = args.enable_task_scheduling,
+        task_period = args.task_period
     )
 
 
